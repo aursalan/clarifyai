@@ -1,36 +1,120 @@
-export default {
+// --- NEW: Define a list of allowed origins ---
+const allowedOrigins = [
+	"https://your-frontend-app.pages.dev", // Your production frontend URL
+	"http://127.0.0.1:5500",             // A common local dev server port
+	"http://localhost:5500",
+	// Add any other ports you might use for local development
+  ];
+  
+  export default {
 	async fetch(req, env) {
+	  // --- NEW: Check the request's origin ---
+	  const origin = req.headers.get("Origin");
+	  const allowedOrigin = allowedOrigins.includes(origin) ? origin : null;
+  
+	  // A helper function to add CORS headers to a response
+	  const corsResponse = (response) => {
+		// If the origin is not allowed, we don't add the header
+		if (allowedOrigin) {
+		  response.headers.set("Access-Control-Allow-Origin", allowedOrigin);
+		  response.headers.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+		  response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+		}
+		return response;
+	  };
+	  
+	  // Handle CORS preflight requests
+	  if (req.method === "OPTIONS") {
+		if (allowedOrigin) {
+		  return new Response(null, {
+			headers: {
+			  "Access-Control-Allow-Origin": allowedOrigin,
+			  "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+			  "Access-Control-Allow-Headers": "Content-Type",
+			},
+		  });
+		} else {
+		  // Deny the preflight request if the origin is not allowed
+		  return new Response("CORS preflight check failed", { status: 403 });
+		}
+	  }
+  
+	  // --- The rest of your API logic remains the same, but uses the corsResponse helper ---
+  
 	  const url = new URL(req.url);
   
 	  if (url.pathname === "/api/ingest" && req.method === "POST") {
+		console.log("Received an ingest request...");
 		const { chunks } = await req.json();
-		for (const chunk of chunks) {
-		  const embedding = await env.AI.run("@cf/baai/bge-base-en-v1.5", { text: chunk });
-		  await env.VECTORIZE.upsert([
-			{ id: crypto.randomUUID(), values: embedding.data[0], metadata: { text: chunk } }
-		  ]);
+  
+		if (!chunks || chunks.length === 0) {
+		  console.error("ERROR: No chunks were received from the frontend.");
+		  return corsResponse(new Response("No chunks to process", { status: 400 }));
 		}
-		return Response.json({ status: "ok" });
+  
+		console.log(`1. Received ${chunks.length} chunks to process from the PDF.`);
+  
+		for (let i = 0; i < chunks.length; i++) {
+		  const chunk = chunks[i];
+		  console.log(`\n--- Processing chunk ${i + 1} of ${chunks.length} ---`);
+		  // Log a preview of the chunk to make sure it's not empty or malformed
+		  console.log(`Chunk content preview: "${chunk.substring(0, 150)}..."`);
+  
+		  try {
+			// Generate embedding for the chunk
+			const embeddingResult = await env.AI.run("@cf/baai/bge-base-en-v1.5", { text: chunk });
+			const values = embeddingResult.data[0];
+			
+			if (!values || values.length === 0) {
+			  console.error(`ERROR: Failed to generate embedding for chunk ${i + 1}. Skipping.`);
+			  continue; // Skip to the next chunk
+			}
+			console.log(`2. Embedding generated successfully (dimensions: ${values.length}).`);
+  
+			// Prepare the object to be stored
+			const vector = {
+			  id: crypto.randomUUID(),
+			  values: values,
+			  metadata: { text: chunk }
+			};
+			
+			// Store the vector in the database
+			await env.VECTORIZE.upsert([vector]);
+			console.log(`3. Successfully stored vector for chunk ${i + 1} in the database.`);
+  
+		  } catch (error) {
+			console.error(`An error occurred while processing chunk ${i + 1}:`, error);
+		  }
+		}
+  
+		console.log("\n--- Ingestion process complete. ---");
+		return corsResponse(Response.json({ status: "ok" }));
 	  }
   
 	  if (url.pathname === "/api/query" && req.method === "POST") {
+		// ... (your query logic) ...
+		console.log("Received a query request...");
 		const { question } = await req.json();
+		console.log(`1. Question received: "${question}"`);
 		const embedding = await env.AI.run("@cf/baai/bge-base-en-v1.5", { text: question });
-  
 		const results = await env.VECTORIZE.query(embedding.data[0], { topK: 3 });
-		const context = results.matches.map(m => m.metadata.text).join("\n");
-  
+		console.log("2. Vector search results:", JSON.stringify(results, null, 2));
+		const context = results.matches
+        .map(m => m.metadata?.text)
+        .filter(Boolean)
+        .join("\n\n---\n\n"); // Using a separator for clarity
+      
+      console.log(`3. Context being sent to LLM:\n${context}`);
 		const completion = await env.AI.run("@cf/meta/llama-2-7b-chat-int8", {
 		  messages: [
-			{ role: "system", content: "Answer based only on the provided context. Cite sources." },
+			{ role: "system", content: "Answer the user's question based only on the provided context." },
 			{ role: "user", content: `Context:\n${context}\n\nQuestion: ${question}` }
 		  ]
 		});
-  
-		return Response.json({ answer: completion.response, sources: results.matches });
+		console.log("4. Final answer from LLM:", completion.response);
+		return corsResponse(Response.json({ answer: completion.response }));
 	  }
   
-	  return new Response("Not Found", { status: 404 });
+	  return corsResponse(new Response("Not Found", { status: 404 }));
 	}
   };
-  

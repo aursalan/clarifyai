@@ -1,3 +1,5 @@
+const API_BASE_URL = " http://127.0.0.1:8787";
+
 async function extractText(file) {
 	const arrayBuffer = await file.arrayBuffer();
 	const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise; // pdfjsLib comes from script tag
@@ -16,9 +18,10 @@ async function extractText(file) {
 	if (!file) return alert("Please upload a PDF");
   
 	const text = await extractText(file);
-	const chunks = text.match(/.{1,500}/g) || [];
+	const chunks = text.match(/.{1,500}/gs) || [];
   
-	await fetch("/api/ingest", {
+	// Use the full URL to your backend API
+	await fetch(`${API_BASE_URL}/api/ingest`, {
 	  method: "POST",
 	  headers: { "Content-Type": "application/json" },
 	  body: JSON.stringify({ chunks })
@@ -29,7 +32,9 @@ async function extractText(file) {
   
   document.getElementById("askBtn").addEventListener("click", async () => {
 	const q = document.getElementById("question").value;
-	const res = await fetch("/api/query", {
+  
+	// Use the full URL to your backend API
+	const res = await fetch(`${API_BASE_URL}/api/query`, {
 	  method: "POST",
 	  headers: { "Content-Type": "application/json" },
 	  body: JSON.stringify({ question: q })
@@ -38,4 +43,3 @@ async function extractText(file) {
 	const data = await res.json();
 	document.getElementById("answer").textContent = data.answer;
   });
-  
