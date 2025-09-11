@@ -105,7 +105,7 @@ const allowedOrigins = [
         .join("\n\n---\n\n"); // Using a separator for clarity
       
       console.log(`3. Context being sent to LLM:\n${context}`);
-		const completion = await env.AI.run("@cf/meta/llama-2-7b-chat-int8", {
+		const completion = await env.AI.run("@cf/mistral/mistral-7b-instruct-v0.1", {
 		  messages: [
 			{ role: "system", content: "Answer the user's question based only on the provided context." },
 			{ role: "user", content: `Context:\n${context}\n\nQuestion: ${question}` }
