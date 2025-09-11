@@ -3,6 +3,7 @@ const allowedOrigins = [
 	"https://clarifyai.pages.dev", // Your production frontend URL
 	"http://127.0.0.1:5501",       // Local dev server port
 	"http://localhost:5500",
+	"http://localhost:5173",
 	// Add any other ports you might use for local development
   ];
   
