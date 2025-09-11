@@ -106,16 +106,26 @@ const allowedOrigins = [
       
 		  // --- CHANGE 2: Use a "Synthesis" Prompt ---
 		  // This new prompt structure guides the LLM to act as an analyst.
-		  const systemPrompt = `You are a helpful AI assistant. Your task is to analyze the provided context, which consists of several text snippets from a larger document. Synthesize the information from these snippets to answer the user's question accurately and completely. If the context does not contain the answer, state that clearly. Do not make up information. Combine relevant details from all snippets into a single, coherent response.`;
+		  const systemPrompt = `You are an expert Q&A assistant. Your task is to answer the user's question based *only* on the provided context snippets.
+- You MUST use *only* the information from the provided context.
+- Do not use any outside knowledge. Do not make up any information, names, or details.
+- If the answer is not present in the context, you MUST explicitly state: 'The provided context does not contain the answer to this question.'`;
 
-		  const userPrompt = `Based on the following context snippets, please answer the question.Context Snippets:${context}---Question: ${question}`;
+		  // The userPrompt remains the same
+		  const userPrompt = `Based on the following context snippets, please answer the question.
+
+Context Snippets:
+${context}
+
+---
+Question: ${question}`;
 
 		  const completion = await env.AI.run("@cf/mistral/mistral-7b-instruct-v0.1", {
-			messages: [
-				{ role: "system", content: systemPrompt },
-				{ role: "user", content: userPrompt }
-			]
-		});
+			  messages: [
+				  { role: "system", content: systemPrompt },
+				  { role: "user", content: userPrompt }
+			  ]
+		  });
 		console.log("4. Final synthesized answer from LLM:", completion.response);
     return corsResponse(Response.json({ answer: completion.response }));
 	  }
