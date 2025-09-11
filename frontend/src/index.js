@@ -32,8 +32,8 @@ document.getElementById("uploadBtn").addEventListener("click", async () => {
         console.log("Successfully extracted text from PDF.");
 
         // Step 2: Chunk the extracted text.
-        const chunks = text.match(/.{1,500}/gs) || [];
-        console.log(`Text split into ${chunks.length} chunks.`);
+        const chunks = text.split(/\n\s*\n/).filter(chunk => chunk.trim().length > 0);
+        console.log(`Text split into ${chunks.length} chunks based on paragraphs.`);
 
         // Step 3: Send the chunks to your Cloudflare Worker to be ingested.
         await fetch(`${API_BASE_URL}/api/ingest`, {

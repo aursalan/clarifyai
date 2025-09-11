@@ -97,22 +97,27 @@ const allowedOrigins = [
 		const { question } = await req.json();
 		console.log(`1. Question received: "${question}"`);
 		const embedding = await env.AI.run("@cf/baai/bge-base-en-v1.5", { text: question });
-		const results = await env.VECTORIZE.query(embedding.data[0], { topK: 3 });
+		const results = await env.VECTORIZE.query(embedding.data[0], { topK: 7 });
 		console.log("2. Vector search results:", JSON.stringify(results, null, 2));
 		const context = results.matches
         .map(m => m.metadata?.text)
         .filter(Boolean)
         .join("\n\n---\n\n"); // Using a separator for clarity
       
-      console.log(`3. Context being sent to LLM:\n${context}`);
-		const completion = await env.AI.run("@cf/mistral/mistral-7b-instruct-v0.1", {
-		  messages: [
-			{ role: "system", content: "Answer the user's question based only on the provided context." },
-			{ role: "user", content: `Context:\n${context}\n\nQuestion: ${question}` }
-		  ]
+		  // --- CHANGE 2: Use a "Synthesis" Prompt ---
+		  // This new prompt structure guides the LLM to act as an analyst.
+		  const systemPrompt = `You are a helpful AI assistant. Your task is to analyze the provided context, which consists of several text snippets from a larger document. Synthesize the information from these snippets to answer the user's question accurately and completely. If the context does not contain the answer, state that clearly. Do not make up information. Combine relevant details from all snippets into a single, coherent response.`;
+
+		  const userPrompt = `Based on the following context snippets, please answer the question.Context Snippets:${context}---Question: ${question}`;
+
+		  const completion = await env.AI.run("@cf/mistral/mistral-7b-instruct-v0.1", {
+			messages: [
+				{ role: "system", content: systemPrompt },
+				{ role: "user", content: userPrompt }
+			]
 		});
-		console.log("4. Final answer from LLM:", completion.response);
-		return corsResponse(Response.json({ answer: completion.response }));
+		console.log("4. Final synthesized answer from LLM:", completion.response);
+    return corsResponse(Response.json({ answer: completion.response }));
 	  }
   
 	  return corsResponse(new Response("Not Found", { status: 404 }));
