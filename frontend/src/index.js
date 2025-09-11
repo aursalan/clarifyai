@@ -1,6 +1,6 @@
 const API_BASE_URL = "https://clarifyai-server.aursalansayed.workers.dev";
 // IMPORTANT: Replace this with the URL of the Hugging Face Space you create.
-const PDF_EXTRACTOR_API_URL = "https://aursalan.hf.space/PdfReader"; 
+const PDF_EXTRACTOR_API_URL = "https://aursalan-pdfreader.hf.space/"; 
 
 document.getElementById("uploadBtn").addEventListener("click", async () => {
     const fileInput = document.getElementById("pdfFile");
