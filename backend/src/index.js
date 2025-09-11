@@ -1,14 +1,13 @@
 // --- NEW: Define a list of allowed origins ---
 const allowedOrigins = [
 	"https://clarifyai.pages.dev", // Your production frontend URL
-	"http://127.0.0.1:5501",       // A common local dev server port
+	"http://127.0.0.1:5501",       // Local dev server port
 	"http://localhost:5500",
 	// Add any other ports you might use for local development
   ];
   
   export default {
 	async fetch(req, env) {
-	  // --- Check the request's origin ---
 	  const origin = req.headers.get("Origin");
 	  const allowedOrigin = allowedOrigins.includes(origin) ? origin : null;
   
@@ -51,37 +50,41 @@ const allowedOrigins = [
   
 		console.log(`1. Received ${chunks.length} chunks to process from the PDF.`);
   
-		for (let i = 0; i < chunks.length; i++) {
-		  const chunk = chunks[i];
-		  console.log(`\n--- Processing chunk ${i + 1} of ${chunks.length} ---`);
-		  console.log(`Chunk content preview: "${chunk.substring(0, 150)}..."`);
+		const batchSize = 100;
+		for (let i = 0; i < chunks.length; i += batchSize) {
+		  const batch = chunks.slice(i, i + batchSize);
   
 		  try {
-			// Generate embedding
-			const embeddingResult = await env.AI.run("@cf/baai/bge-base-en-v1.5", { text: chunk });
-			const values = embeddingResult.data[0];
+			// ✅ Batch embedding
+			const embeddingResult = await env.AI.run("@cf/baai/bge-base-en-v1.5", {
+			  text: batch,
+			});
   
-			if (!values || values.length === 0) {
-			  console.error(`ERROR: Failed to generate embedding for chunk ${i + 1}. Skipping.`);
+			const embeddings = embeddingResult.data;
+  
+			if (!embeddings || embeddings.length === 0) {
+			  console.error(`ERROR: Failed to generate embeddings for batch starting at chunk ${i + 1}.`);
 			  continue;
 			}
-			console.log(`2. Embedding generated successfully (dimensions: ${values.length}).`);
   
-			// Store vector (flatten metadata to avoid being dropped)
-			const vector = {
+			console.log(`2. Generated ${embeddings.length} embeddings for batch.`);
+  
+			// Build vector objects for upsert
+			const vectors = batch.map((chunk, idx) => ({
 			  id: crypto.randomUUID(),
-			  values,
+			  values: embeddings[idx],
 			  metadata: {
-				text: String(chunk), // ✅ ensure plain string
+				text: String(chunk),
+				chunk_id: i + idx,
 			  },
-			};
+			}));
   
-			console.log("VECTOR OBJECT BEFORE UPSERT:", JSON.stringify(vector, null, 2));
+			console.log("VECTOR OBJECTS BEFORE UPSERT:", JSON.stringify(vectors[0], null, 2), "...");
   
-			await env.VECTORIZE.upsert([vector]);
-			console.log(`3. Successfully stored vector for chunk ${i + 1}.`);
+			await env.VECTORIZE.upsert(vectors);
+			console.log(`3. Successfully stored ${vectors.length} vectors for batch starting at chunk ${i + 1}.`);
 		  } catch (error) {
-			console.error(`An error occurred while processing chunk ${i + 1}:`, error);
+			console.error(`An error occurred while processing batch starting at chunk ${i + 1}:`, error);
 		  }
 		}
   
