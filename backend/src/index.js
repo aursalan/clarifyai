@@ -1,6 +1,6 @@
 // --- NEW: Define a list of allowed origins ---
 const allowedOrigins = [
-	"https://your-frontend-app.pages.dev", // Your production frontend URL
+	"https://clarifyai.pages.dev/", // Your production frontend URL
 	"http://127.0.0.1:5500",             // A common local dev server port
 	"http://localhost:5500",
 	// Add any other ports you might use for local development
