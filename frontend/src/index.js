@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://clarifyai-server.aursalansayed.workers.dev/";
+const API_BASE_URL = "https://clarifyai-server.aursalansayed.workers.dev";
 
 async function extractText(file) {
 	const arrayBuffer = await file.arrayBuffer();
