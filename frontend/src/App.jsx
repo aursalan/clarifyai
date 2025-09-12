@@ -156,7 +156,7 @@ const App = () => {
 
             {/* Footer Input */}
             <footer className="flex-shrink-0">
-                <div className="w-full max-w-4xl mx-auto px-4 mb-6">
+                <div className="w-full max-w-4xl mx-auto px-4 mb-4">
                     <form
                         onSubmit={handleAskQuestion}
                         className="relative"
@@ -215,6 +215,10 @@ const App = () => {
                             <img src={SendIcon} alt="Send" className="w-5 h-5" />
                         </button>
                     </form>
+                    {/* Disclaimer text */}
+                    <p className="mt-2 text-[12px] text-gray-500 dark:text-gray-400 text-center">
+                        ClarifyAI can make mistakes sometimes.
+                    </p>
                 </div>
             </footer>
 
