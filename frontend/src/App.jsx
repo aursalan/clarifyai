@@ -186,7 +186,7 @@ const App = () => {
                             }}
                             rows={1}
                             placeholder="Type a message..."
-                            className="w-full min-h-[56px] max-h-[240px] pl-12 pr-16 py-3 resize-none
+                            className="w-full min-h-[56px] max-h-[240px] pl-12 pr-16 py-[13px] resize-none
                    bg-white dark:bg-gray-700 rounded-2xl border
                    border-gray-200 dark:border-gray-600 focus:outline-none
                    text-gray-900 dark:text-gray-100 no-scrollbar"
@@ -199,7 +199,7 @@ const App = () => {
                             type="button"
                             onClick={() => fileInputRef.current.click()}
                             disabled={isProcessing}
-                            className="absolute left-3 bottom-4 text-gray-500 dark:text-gray-400 hover:opacity-70"
+                            className="absolute left-3 bottom-5.5 text-gray-500 dark:text-gray-400 hover:opacity-70"
                         >
                             <img src={PaperclipIcon} alt="Attach" className="w-6 h-6" />
                         </button>
@@ -208,7 +208,7 @@ const App = () => {
                         <button
                             type="submit"
                             disabled={isProcessing || !question.trim()}
-                            className="absolute right-3 bottom-[10.5px] bg-[#E3E7EC] dark:bg-gray-600 p-2 
+                            className="absolute right-3 bottom-[15px] bg-[#E3E7EC] dark:bg-gray-600 p-2 
                    rounded-xl hover:opacity-90 transition 
                    disabled:opacity-50 disabled:cursor-not-allowed"
                         >
