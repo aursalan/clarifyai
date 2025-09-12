@@ -2,16 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import Header from "./components/Header";
 import ChatUI from "./components/ChatUI";
 import Footer from "./components/Footer";
+import Tagline from "./components/Tagline";
 
 const App = () => {
   const [fileName, setFileName] = useState("");
   const [question, setQuestion] = useState("");
-  const [conversation, setConversation] = useState([
-    {
-      sender: "ai",
-      text: "Welcome to ClarifyAI. You can turn your PDFs into conversations. Upload a PDF and start chatting now!",
-    },
-  ]);
+  const [conversation, setConversation] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -113,7 +109,14 @@ const App = () => {
   return (
     <div className="min-h-screen w-full flex flex-col font-sans bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
       <Header />
-      <ChatUI conversation={conversation} />
+      
+      {/* Show tagline if no PDF uploaded, else show chat */}
+      {fileName ? (
+        <ChatUI conversation={conversation} />
+      ) : (
+        <Tagline />
+      )}
+
       <Footer
         question={question}
         setQuestion={setQuestion}
