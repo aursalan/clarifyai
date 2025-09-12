@@ -3,10 +3,11 @@ import React from "react";
 const Tagline = () => {
   return (
     <div className="flex-1 flex items-center justify-center text-center px-4">
-      <p className="text-lg sm:text-xl md:text-2xl font-medium text-gray-600 dark:text-gray-300">
-        Welcome to <span className="font-bold">ClarifyAI</span>.  
-        Upload a PDF to start chatting with it.
-      </p>
+      <div>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
+          Hello, Explorer
+        </h1>
+      </div>
     </div>
   );
 };

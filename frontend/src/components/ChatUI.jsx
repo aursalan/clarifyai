@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import Typewriter from "typewriter-effect";
+import Typewriter from "./Typewriter"; // import your custom typewriter
 
 const ChatUI = ({ conversation }) => {
   const chatEndRef = useRef(null);
@@ -24,6 +24,7 @@ const ChatUI = ({ conversation }) => {
             </div>
           );
         }
+
         if (msg.sender === "system_error") {
           return (
             <div key={index} className="text-center text-xs text-red-500 px-4">
@@ -31,6 +32,7 @@ const ChatUI = ({ conversation }) => {
             </div>
           );
         }
+
         if (msg.sender === "user") {
           return (
             <div key={index} className="flex justify-end">
@@ -40,22 +42,17 @@ const ChatUI = ({ conversation }) => {
             </div>
           );
         }
+
         if (msg.sender === "ai") {
           return (
             <div key={index} className="flex justify-start">
               <div className="px-4 py-3 rounded-2xl border border-gray-200 inline-block max-w-xl break-words whitespace-pre-line leading-relaxed tracking-normal bg-white dark:bg-gray-700 text-black dark:text-gray-100">
-                <Typewriter
-                  options={{
-                    strings: msg.text,
-                    autoStart: true,
-                    delay: 30,
-                  }}
-                />
+                <Typewriter text={msg.text} speed={30} />
               </div>
             </div>
           );
         }
-        
+
         return null;
       })}
       <div ref={chatEndRef} />
