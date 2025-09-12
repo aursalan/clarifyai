@@ -107,18 +107,15 @@ const App = () => {
     return (
         <div className="h-screen w-screen flex flex-col font-sans bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
             {/* Header */}
-            <header className="flex-shrink-0 bg-[#E5E7EB] text-white shadow-md z-10">
-                <div className="w-full max-w-4xl mx-auto flex items-center p-4">
-                    <img src={Logo} alt="Avatar" className="w-10 h-10" />
-                    <div className="ml-3">
-                        <h1 className="font-bold text-lg text-black ">ClarifyAI</h1>
-                        <p className="text-sm opacity-80 text-black">{fileName ? fileName : 'Ready for your documents'}</p>
-                    </div>
-                    <button className="ml-auto text-white/80 hover:text-white">
-                    <img src={MoreIcon} alt="More" className="w-6 h-6" />
-                    </button>
+            <header className="flex-shrink-0 bg-white/1 z-10 backdrop-blur-none">
+                <div className="w-full max-w-4xl mx-auto flex items-center justify-left p-4">
+                    <h1 className="font-bold text-2xl bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
+                        ClarifyAI
+                    </h1>
                 </div>
             </header>
+
+
 
             {/* Chat Area */}
             <main className="flex-1 overflow-y-auto">
@@ -127,7 +124,7 @@ const App = () => {
                         if(msg.sender === 'system_processing') {
                             return (
                                 <div key={index} className="flex justify-start">
-                                    <div className="px-4 py-3 rounded-2xl inline-block bg-[#1F64D3] dark:bg-gray-700 text-white dark:text-gray-200">
+                                    <div className="px-4 py-3 rounded-2xl inline-block bg-blue-500 dark:bg-gray-700 text-white dark:text-gray-200">
                                         <div className="flex items-center space-x-1">
                                             <span className="w-2 h-2 bg-white rounded-full animate-pulse delay-0"></span>
                                             <span className="w-2 h-2 bg-white rounded-full animate-pulse delay-150"></span>
