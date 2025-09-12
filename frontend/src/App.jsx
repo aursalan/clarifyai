@@ -107,16 +107,20 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col font-sans bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+    <div className="flex flex-col min-h-screen font-sans bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+      {/* Header (fixed height) */}
       <Header />
-      
-      {/* Show tagline if no PDF uploaded, else show chat */}
-      {fileName ? (
-        <ChatUI conversation={conversation} />
-      ) : (
-        <Tagline />
-      )}
 
+      {/* Middle section grows to fill space */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {fileName ? (
+          <ChatUI conversation={conversation} />
+        ) : (
+          <Tagline />
+        )}
+      </div>
+
+      {/* Footer at bottom */}
       <Footer
         question={question}
         setQuestion={setQuestion}

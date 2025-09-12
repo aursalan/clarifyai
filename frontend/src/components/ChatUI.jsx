@@ -9,7 +9,8 @@ const ChatUI = ({ conversation }) => {
   }, [conversation]);
 
   return (
-    <main className="flex-1 overflow-y-auto px-2 sm:px-4">
+    <main className="flex-1 overflow-y-auto px-2 sm:px-4 pt-20 pb-24"> 
+      {/* pt-20 = space for header, pb-24 = space for footer */}
       <div className="max-w-4xl mx-auto p-2 sm:p-4 space-y-4">
         {conversation.map((msg, index) => {
           if (msg.sender === "system_processing") {
