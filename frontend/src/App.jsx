@@ -18,6 +18,7 @@ const App = () => {
     document.documentElement.classList.add("dark");
   }, []);
 
+  // --- File Upload ---
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -64,6 +65,7 @@ const App = () => {
     }
   };
 
+  // --- Ask Question ---
   const handleAskQuestion = async (e) => {
     e.preventDefault();
     if (!question.trim() || isProcessing || !fileName) {
@@ -107,28 +109,34 @@ const App = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen font-sans bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
-      {/* Header (fixed height) */}
-      <Header />
+    <div className="h-screen w-full flex flex-col bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+      {/* Fixed Header */}
+      <header className="fixed top-0 left-0 right-0 z-10 w-full bg-white dark:bg-gray-900 shadow-md h-16 flex items-center">
+        <Header />
+      </header>
 
-      {/* Middle section grows to fill space */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      {/* Middle Content (scrollable) */}
+      <main className="flex-1 overflow-y-auto pt-16 pb-20">
         {fileName ? (
           <ChatUI conversation={conversation} />
         ) : (
-          <Tagline />
+          <div className="h-full flex items-center justify-center">
+            <Tagline />
+          </div>
         )}
-      </div>
+      </main>
 
-      {/* Footer at bottom */}
-      <Footer
-        question={question}
-        setQuestion={setQuestion}
-        handleFileChange={handleFileChange}
-        handleAskQuestion={handleAskQuestion}
-        isProcessing={isProcessing}
-        fileInputRef={fileInputRef}
-      />
+      {/* Fixed Footer */}
+      <footer className="fixed bottom-0 left-0 right-0 z-10 w-full bg-white dark:bg-gray-900 shadow-md h-20 flex items-center">
+        <Footer
+          question={question}
+          setQuestion={setQuestion}
+          handleFileChange={handleFileChange}
+          handleAskQuestion={handleAskQuestion}
+          isProcessing={isProcessing}
+          fileInputRef={fileInputRef}
+        />
+      </footer>
     </div>
   );
 };
