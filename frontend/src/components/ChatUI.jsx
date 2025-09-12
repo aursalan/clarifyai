@@ -34,7 +34,7 @@ const ChatUI = ({ conversation }) => {
         if (msg.sender === "user") {
           return (
             <div key={index} className="flex justify-end">
-              <div className="px-4 py-3 rounded-2xl inline-block max-w-xl break-words bg-[#DDE3EA] text-black">
+              <div className="px-4 py-3 rounded-2xl inline-block max-w-xl break-words whitespace-pre-line leading-relaxed tracking-normal bg-[#DDE3EA] text-black">
                 {msg.text}
               </div>
             </div>
@@ -43,7 +43,7 @@ const ChatUI = ({ conversation }) => {
         if (msg.sender === "ai") {
           return (
             <div key={index} className="flex justify-start">
-              <div className="px-4 py-3 rounded-2xl border border-gray-200 inline-block max-w-xl break-words bg-white dark:bg-gray-700 text-black dark:text-gray-100">
+              <div className="px-4 py-3 rounded-2xl border border-gray-200 inline-block max-w-xl break-words whitespace-pre-line leading-relaxed tracking-normal bg-white dark:bg-gray-700 text-black dark:text-gray-100">
                 <Typewriter
                   options={{
                     strings: msg.text,
@@ -55,6 +55,7 @@ const ChatUI = ({ conversation }) => {
             </div>
           );
         }
+        
         return null;
       })}
       <div ref={chatEndRef} />
