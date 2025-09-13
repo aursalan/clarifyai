@@ -116,7 +116,7 @@ const App = () => {
       </header>
 
       {/* Middle Content (scrollable) */}
-      <main className="flex-1 overflow-y-auto pt-16 pb-20 bg-white">
+      <main className="flex-1 overflow-y-auto pt-16 pb-20 bg-white dark:bg-gray-900 dark:text-gray-100">
         {fileName ? (
           <ChatUI conversation={conversation} />
         ) : (
