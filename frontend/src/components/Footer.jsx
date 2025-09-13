@@ -50,25 +50,25 @@ const Footer = ({
           type="button"
           onClick={() => fileInputRef.current.click()}
           disabled={isProcessing}
-          className="absolute left-3 bottom-5.5 text-gray-500 dark:text-gray-400 hover:opacity-70"
+          className="absolute left-3 bottom-5.5 text-gray-500 dark:text-gray-400 hover:opacity-70 "
         >
-          <img src={PaperclipIcon} alt="Attach" className="w-6 h-6" />
+          <img src={PaperclipIcon} alt="Attach" className="w-6 h-6 dark:invert" />
         </button>
 
         {/* Right Icon (Send) */}
         <button
           type="submit"
           disabled={isProcessing || !question.trim()}
-          className="absolute right-3 bottom-[15px] bg-[#E3E7EC] dark:bg-gray-600 p-2 
+          className="absolute right-3 bottom-[15px] bg-[#E3E7EC] dark:bg-transparent dark:border dark:border-gray-400 p-2 
             rounded-xl hover:opacity-90 transition 
-            disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled:opacity-50 disabled:cursor-not-allowed "
         >
-          <img src={SendIcon} alt="Send" className="w-5 h-5" />
+          <img src={SendIcon} alt="Send" className="w-5 h-5 dark:invert" />
         </button>
       </form>
 
       {/* Disclaimer */}
-      <p className="mt-1 text-[13px] mb-5 text-gray-500 dark:text-gray-400 text-center">
+      <p className="text-[13px] mb-5 text-gray-500 dark:text-gray-400 text-center">
         ClarifyAI can make mistakes sometimes.
       </p>
     </div>
