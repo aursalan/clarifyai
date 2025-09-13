@@ -14,7 +14,7 @@ const ChatUI = ({ conversation }) => {
         if (msg.sender === "system_processing") {
           return (
             <div key={index} className="flex justify-start">
-              <div className="px-4 py-3 rounded-2xl inline-block bg-white dark:bg-gray-700 text-white dark:text-gray-200">
+              <div className="px-4 py-3 rounded-2xl inline-block text-white dark:text-gray-200">
                 <div className="flex items-center space-x-1">
                   <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-0"></span>
                   <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-150"></span>
