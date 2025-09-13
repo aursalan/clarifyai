@@ -111,12 +111,12 @@ const App = () => {
   return (
     <div className="h-dvh w-full flex flex-col bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
       {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-10 w-full bg-white dark:bg-gray-900 shadow-md h-16 flex items-center">
+      <header className="fixed top-0 left-0 right-0 z-10 w-full bg-white dark:bg-gray-900 h-16 flex items-center">
         <Header />
       </header>
 
       {/* Middle Content (scrollable) */}
-      <main className="flex-1 overflow-y-auto pt-16 pb-20">
+      <main className="flex-1 overflow-y-auto pt-16 pb-20 bg-white">
         {fileName ? (
           <ChatUI conversation={conversation} />
         ) : (
@@ -127,7 +127,7 @@ const App = () => {
       </main>
 
       {/* Fixed Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 z-10 w-full bg-white dark:bg-gray-900 shadow-md h-20 flex items-center">
+      <footer className="fixed bottom-0 left-0 right-0 z-10 w-full bg-white dark:bg-gray-900 h-20 flex items-center">
         <Footer
           question={question}
           setQuestion={setQuestion}
