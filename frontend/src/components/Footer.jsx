@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import PaperclipIcon from "../assets/paperclip.png";
 import SendIcon from "../assets/arrow-right.png";
 
@@ -10,9 +10,25 @@ const Footer = ({
   isProcessing,
   fileInputRef,
 }) => {
+  const textareaRef = useRef(null);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (!question.trim()) return;
+
+    handleAskQuestion(e);
+
+    // reset textarea after submit
+    setQuestion("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "56px"; // back to default min height
+      textareaRef.current.style.overflowY = "hidden";
+    }
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-2">
-      <form onSubmit={handleAskQuestion} className="relative">
+      <form onSubmit={onSubmit} className="relative">
         {/* Hidden File Input */}
         <input
           type="file"
@@ -25,6 +41,7 @@ const Footer = ({
 
         {/* Textarea */}
         <textarea
+          ref={textareaRef}
           value={question}
           onChange={(e) => {
             setQuestion(e.target.value);
@@ -33,7 +50,14 @@ const Footer = ({
             const MAX_HEIGHT = 240;
             const newHeight = Math.min(ta.scrollHeight, MAX_HEIGHT);
             ta.style.height = `${newHeight}px`;
-            ta.style.overflowY = ta.scrollHeight > MAX_HEIGHT ? "auto" : "hidden";
+            ta.style.overflowY =
+              ta.scrollHeight > MAX_HEIGHT ? "auto" : "hidden";
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              onSubmit(e); // trigger form submit + reset
+            }
           }}
           rows={1}
           placeholder="Type a message..."
