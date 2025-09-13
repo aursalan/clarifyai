@@ -111,7 +111,7 @@ const App = () => {
   return (
     <div className="h-dvh w-full flex flex-col bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
       {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-10 w-full bg-white dark:bg-gray-900 h-16 flex items-center">
+      <header className="fixed top-0 left-0 right-0 z-10 w-full bg-white dark:bg-gray-900 h-10 flex items-center">
         <Header />
       </header>
 
