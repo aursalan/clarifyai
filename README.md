@@ -2,8 +2,6 @@
 
 > ClarifyAI is an intelligent PDF chatbot built with a Retrieval-Augmented Generation (RAG) pipeline. It allows you to upload a PDF document and ask specific questions about its content, receiving accurate answers drawn directly from the text.
 
-This project leverages a modern, serverless architecture to provide a seamless and efficient user experience.
-
 - **Chat with Your Documents:** Simply upload a PDF and start a conversation. Get insights and answers without manually searching through pages.
 - **Context-Aware Answers:** Powered by a RAG pipeline, the chatbot provides answers based only on the content of your uploaded document, avoiding generic or external information.
 - **Serverless Deployment:** Built with Cloudflare Workers and Pages for high scalability and low latency. The PDF text extraction is handled by a separate microservice deployed on Hugging Face.
@@ -30,6 +28,9 @@ This project leverages a modern, serverless architecture to provide a seamless a
 
 ## 2. How to Install and Run the Project
 
+> [!NOTE]  
+> Project is live.
+
 **For Developers: Deploying Your Own Instance** 
 - If you want to deploy your own version of this project, you will need a Cloudflare account and the Wrangler CLI installed. The following steps will guide you through the process.
 
@@ -46,27 +47,26 @@ This project leverages a modern, serverless architecture to provide a seamless a
 
 **2. Deploy the Backend Worker:**
 - Before deploying the code, you need to create the vector database that will store the document embeddings.
- - Navigate to your Cloudflare Dashboard.
- - Go to Workers & Pages and select Create application.
- - Choose Workers and click Create worker.
- - Select Import from Git and choose Import a public Git repo.
- - Paste the project's Git repository URL.
- - In the deployment settings, set the Root directory to backend.
- - Deploy the worker.
+- Navigate to your Cloudflare Dashboard.
+- Go to Workers & Pages and select Create application.
+- Choose Workers and click Create worker.
+- Select Import from Git and choose Import a public Git repo.
+- Paste the project's Git repository URL.
+- In the deployment settings, set the Root directory to backend.
+- Deploy the worker.
 
 **3. Deploy the Frontend with Pages:**
 - Return to the Cloudflare Dashboard and once again select Create application.
 - This time, choose the Pages tab and select Connect to Git.
 - Connect to the same GitHub repository.
 - In the Build settings:
-   - Set the Framework preset to React.
-   - Set the Root directory to frontend.
+  - Set the Framework preset to React.
+  - Set the Root directory to frontend.
 - Save and deploy.
-
 - Once the deployment is complete, Cloudflare will provide you with a unique URL for your Pages site (e.g., your-project.pages.dev). You can now use your own self-hosted instance of the application.
 
 **4. Access the Application:**\
- Open your web browser and navigate to http://your-project.pages.dev.
+- Open your web browser and navigate to http://your-project.pages.dev.
  
 ## 3. How to Use the Project
 
